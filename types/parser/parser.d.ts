@@ -43,7 +43,7 @@ export declare function stringToTokens(src: string, tokenizer?: Tokenizer): Toke
 export declare function puffRange(r: Range): Range;
 export declare const namedCharValues: Map<string, string>;
 export declare function parseSingle(t: Token, wildAllowed: boolean): Value.Syntax;
-export declare function parseValue(tokens: Token[], { customHandlers, defaultHandler }?: ParseHandlingSettings): Value.Syntax;
+export declare function parseValue(tokens: Token[], handlingSettings?: ParseHandlingSettings): Value.Syntax;
 export declare function parseValues(tokens: Token[]): Value.Syntax[];
 export declare function lower(v: Value.T): Op.T[];
 export declare function parseStmt(v: Value.T): Stmt.T;

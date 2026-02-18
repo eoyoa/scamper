@@ -2,7 +2,7 @@ import { Token } from "./parser";
 import { Value } from "../lang";
 export interface ParseHandler {
     shouldHandle: (beg: Token) => boolean;
-    handle: (beg: Token, tokens: Token[]) => Value.Syntax;
+    handle: (beg: Token, tokens: Token[], handlingSettings: ParseHandlingSettings) => Value.Syntax;
 }
 export interface ParseHandlingSettings {
     customHandlers: ParseHandler[];

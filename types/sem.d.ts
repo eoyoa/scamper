@@ -50,6 +50,7 @@ export declare class Sem {
     step(): void;
     stepToNextStmt(): void;
     execute(): void;
+    executeUnsafely(): void;
 }
 export {};
 //# sourceMappingURL=sem.d.ts.map
