@@ -1,4 +1,5 @@
 import {AST} from "./ast";
+import {ContractHint} from "./contract";
 
 export class Loc {
   line: number
@@ -37,18 +38,27 @@ export const noRange = new Range(-1, -1, -1, -1, -1, -1)
 
 type Phase = 'Parser' | 'Runtime'
 
+type ErrorType = "Contract";
+type ErrorHint = ContractHint;
+export interface ErrorData {
+  type: ErrorType
+  hint: ErrorHint
+}
+
 export class ScamperError extends Error {
   phase: Phase
   modName?: string
   range?: Range
   source?: string
+  data?: ErrorData
 
-  constructor (phase: Phase, msg: string, modName?: string, range?: Range, source?: string) {
+  constructor (phase: Phase, msg: string, modName?: string, range?: Range, source?: string, data?: ErrorData) {
     super(msg)
     this.phase = phase
     this.modName = modName
     this.range = range
     this.source = source
+    this.data = data
   }
 
   toString(): string {
@@ -118,7 +128,7 @@ export namespace Value {
   export type TaggedObject = Closure | Char | Sym | Pair | Syntax | Struct
   export type Closure = { [scamperTag]: 'closure', params: Id[], ops: Op.T[], env: Env, name?: string }
   export type Char = { [scamperTag]: 'char', value: string }
-  export type Sym  = { [scamperTag]: 'sym', value: string } 
+  export type Sym  = { [scamperTag]: 'sym', value: string }
   export type Pair = { [scamperTag]: 'pair', fst: T, snd: T, isList: boolean }
   export type Syntax = { [scamperTag]: 'syntax', range: Range, value: T }
 
@@ -177,7 +187,7 @@ export namespace Value {
 
   export const stripSyntax = (v: T): T =>
     isSyntax(v) ? (v as Syntax).value : v
-  
+
   export function stripAllSyntax (v: T): T {
     if (isSyntax(v)) {
       return stripAllSyntax((v as Syntax).value)
@@ -392,7 +402,7 @@ export class Env {
   quotient (...names: Id[]): Env {
     const ret = this.clone()
     ret.remove(...names)
-    return ret 
+    return ret
   }
 }
 
