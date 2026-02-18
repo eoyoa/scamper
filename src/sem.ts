@@ -912,9 +912,13 @@ export class Sem {
 
   execute (): void {
     try {
-      while (!this.isFinished()) { this.step() }
+      this.executeUnsafely()
     } catch (e) {
       renderToOutput(this.display, e)
     }
+  }
+
+  executeUnsafely(): void {
+    while (!this.isFinished()) { this.step() }
   }
 }
