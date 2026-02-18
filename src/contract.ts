@@ -191,7 +191,7 @@ export function checkContract (args: IArguments, contract: Contract): void {
           undefined,
           undefined,
           contract.params[i].hint
-              ? { type: "Contract", hint: { ...contract.params[i].hint, actual: typeof arg } }
+              ? { type: "Contract", hint: { ...contract.params[i].hint, actual: Value.typeOf(arg) } }
               : undefined
       )
     }
@@ -206,7 +206,7 @@ export function checkContract (args: IArguments, contract: Contract): void {
             undefined,
             undefined,
             contract.varargs!.hint
-                ? { type: "Contract", hint: { ...contract.varargs!.hint, actual: typeof arg } }
+                ? { type: "Contract", hint: { ...contract.varargs!.hint, actual: Value.typeOf(arg) } }
                 : undefined
         )
       }
