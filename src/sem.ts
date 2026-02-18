@@ -692,6 +692,7 @@ export class Sem {
   traces?: HTMLElement[]
   defaultDisplay: boolean
   isPrintingCode: boolean
+  unsafeErrors?: unknown[]
 
   constructor (display: HTMLElement,
                builtinLibs: Map<Id, Library>,
@@ -769,6 +770,7 @@ export class Sem {
       } catch (e) {
         renderToOutput(this.display, e)
         this.advance()
+        if (this.unsafeErrors) this.unsafeErrors.push(e)
       }
     } else {
       if (this.state.stack.length !== 1) {
@@ -836,6 +838,7 @@ export class Sem {
       } catch (e) {
         renderToOutput(this.display, e)
         this.advance()
+        if (this.unsafeErrors) this.unsafeErrors.push(e)
       }
     } else {
       if (this.state.stack.length !== 1) {
@@ -863,6 +866,7 @@ export class Sem {
       } catch (e) {
         renderToOutput(this.display, e)
         this.advance()
+        if (this.unsafeErrors) this.unsafeErrors.push(e)
       }
     } else {
       if (this.state.stack.length !== 1) {
@@ -907,6 +911,7 @@ export class Sem {
       while (!this.isFinished() && this.curStmt === idx) { this.step() }
     } catch (e) {
       renderToOutput(this.display, e)
+      if (this.unsafeErrors) this.unsafeErrors.push(e)
     }
   }
 
@@ -919,6 +924,10 @@ export class Sem {
   }
 
   executeUnsafely(): void {
+    this.unsafeErrors = [];
     while (!this.isFinished()) { this.step() }
+    if (this.unsafeErrors.length > 0) {
+      throw this.unsafeErrors;
+    }
   }
 }
