@@ -917,7 +917,7 @@ export class Sem {
 
   execute (): void {
     try {
-      this.executeUnsafely()
+      this.runExecution()
     } catch (e) {
       renderToOutput(this.display, e)
     }
@@ -925,9 +925,13 @@ export class Sem {
 
   executeUnsafely(): void {
     this.unsafeErrors = [];
-    while (!this.isFinished()) { this.step() }
+    this.runExecution();
     if (this.unsafeErrors.length > 0) {
       throw this.unsafeErrors;
     }
+  }
+
+  runExecution(): void {
+    while (!this.isFinished()) { this.step() }
   }
 }
